@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "sourceMap": false,
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo"
+  }
+}
