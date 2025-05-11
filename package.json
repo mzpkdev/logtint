@@ -1,7 +1,7 @@
 {
   "name": "logtint",
   "version": "0.0.0",
-  "description": "",
+  "description": "Lightweight, isomorphic library that brings colors and style to your `console.log`",
   "type": "commonjs",
   "main": "./index.js",
   "module": "./index.mjs",
@@ -10,7 +10,8 @@
     "postinstall": "ts-patch install",
     "build": "node buildscript/compile.mjs",
     "clean": "node buildscript/clean.mjs",
-    "prepack": "npm run build"
+    "prepack": "npm run clean && npm run build",
+    "postversion": "git add -A src && git push && git push --tags"
   },
   "devDependencies": {
     "@types/node": "^22.15.17",
@@ -21,8 +22,20 @@
   },
   "author": "Mateusz Pietrzak",
   "license": "MIT",
+  "repository": "mzpkdev/logtint",
   "keywords": [
+    "isomorphic",
     "console.log",
-    "logger"
+    "console",
+    "log",
+    "logger",
+    "logging",
+    "color",
+    "colour",
+    "colors",
+    "terminal",
+    "cli",
+    "tty",
+    "ansi"
   ]
 }

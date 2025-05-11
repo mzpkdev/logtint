@@ -1,0 +1,27 @@
+# Development files
+.git/
+.github/
+.gitignore
+.editorconfig
+tsconfig.json
+tsconfig.*.json
+.tsbuildinfo
+*.ts
+!*.d.ts
+
+# Build and test files
+buildscript/
+
+# Development dependencies
+node_modules/
+package-lock.json
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Misc
+.DS_Store
+*.log 

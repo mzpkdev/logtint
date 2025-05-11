@@ -8,7 +8,7 @@ const TextStyle = (ansi: string, css: string) => {
     return { ansi, css } as const
 }
 
-const define = <TDefinition extends Record<string, TextStyle>>(
+export const define = <TDefinition extends Record<string, TextStyle>>(
     definition: TDefinition
 ): { [K in keyof TDefinition]: string } => {
     const normalized = {} as Record<keyof TDefinition, string>
@@ -26,7 +26,7 @@ const define = <TDefinition extends Record<string, TextStyle>>(
 }
 
 export const FORMATTING = define({
-    RESET: TextStyle("\x1b[0m", ""),
+    RESET: TextStyle("\x1b[0m", "color: unset;"),
     ITALIC: TextStyle("\x1b[3m", "font-style: italic;"),
     BOLD: TextStyle("\x1b[1m", "font-weight: bold;"),
     UNDERLINE: TextStyle("\x1b[4m", "text-decoration: underline;"),

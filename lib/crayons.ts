@@ -1,13 +1,5 @@
 import { FORMATTING, COLOR, BACKGROUND_COLOR } from "./TextStyle"
-import Tinted from "./Tinted"
-
-
-const string = (strings: TemplateStringsArray, ...values: unknown[]) => {
-    return strings.reduce((accumulator, string, i) => {
-        const value = values[i] ?? ""
-        return accumulator + string + value
-    }, "")
-}
+import Tinted, { tint } from "./Tinted"
 
 
 type Formatting = {
@@ -20,9 +12,10 @@ const apply = (definition: string): Formatting =>
         if (Tinted.isTinted(text) || typeof text === "string") {
             return Tinted(text, definition)
         }
-        return Tinted(string(text, ...values), definition)
+        return Tinted(tint(text, ...values), definition)
     }
 
+export const reset = apply(FORMATTING.RESET)
 export const italic = apply(FORMATTING.ITALIC)
 export const bold = apply(FORMATTING.BOLD)
 export const underline = apply(FORMATTING.UNDERLINE)
