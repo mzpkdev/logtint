@@ -1,6 +1,6 @@
 {
   "name": "logtint",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Lightweight, isomorphic library that brings colors and style to your `console.log`",
   "type": "commonjs",
   "main": "./index.js",
