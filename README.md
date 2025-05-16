@@ -6,11 +6,13 @@
 [![bundle size](https://img.shields.io/bundlephobia/min/logtint)](https://bundlephobia.com/result?p=logtint)
 
 </div>
+<br>
+<br>
 
 <p align="center">
-  <img src="./.github/assets/logo/title-alt.png" height="55" align="center" />
+  <img src="./.github/assets/logo.png" height="110" align="center" />
   <p align="center">
-    <strong>`logtint`</strong> is a lightweight, isomorphic library that brings colors and style to your <code>console.log</code> <br>  
+    <strong>logtint</strong> is a lightweight, isomorphic library that brings colors and style to your <code>console.log</code> <br>  
       — use single API that works in both <em>Node.js</em> and the <em>browser</em>
     <br />
     <br />
