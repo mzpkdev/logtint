@@ -6,9 +6,9 @@ const createLogger = (logger: typeof console.log) => {
     return (strings: TemplateStringsArray, ...values: unknown[]): void => {
         const { text, styles } = tint(strings, ...values)
         if (inBrowser()) {
-            logger.call(console, text, ...styles)
+            logger.call(globalThis.console, text, ...styles)
         } else {
-            logger.call(console, text.replaceAll(`<END>`, "\x1b[0m"))
+            logger.call(globalThis.console, text.replaceAll(`<END>`, "\x1b[0m"))
         }
     }
 }
@@ -21,7 +21,7 @@ function log(eitherStringsOrLogger: typeof console.log | TemplateStringsArray, .
         return createLogger(eitherStringsOrLogger)
     }
     if (Array.isArray(eitherStringsOrLogger)) {
-        createLogger(console.log)(eitherStringsOrLogger, ...rest)
+        createLogger(globalThis.console.log)(eitherStringsOrLogger, ...rest)
         return
     }
     console.log(eitherStringsOrLogger)

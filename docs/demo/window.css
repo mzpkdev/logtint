@@ -1,0 +1,44 @@
+.window {
+    box-sizing: border-box;
+    width: 90%;
+    height: 25px;
+    margin: 0 auto;
+}
+
+.menu {
+    box-sizing: border-box;
+    padding: 6px 0 2px 6px;
+    background-color: #bbb;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.menu > .button {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    margin: 0 3px;
+    border: 1px solid #000000;
+    border-radius: 50%;
+}
+
+.button.close {
+    box-sizing: border-box;
+    background-color: #ff3b47;
+    border: 1px solid #9d252b;
+}
+
+.button.minimize {
+    box-sizing: border-box;
+    left: 11px;
+    background-color: #ffc100;
+    border-color: #9d802c;
+}
+
+.button.zoom {
+    box-sizing: border-box;
+    left: 16px;
+    background-color: #00d742;
+    border-color: #049931;
+}

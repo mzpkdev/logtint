@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>JS REPL with Import Support</title>
+    <style>
+        body {
+            background-color: #272727;
+            padding: 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="./window.css">
+    <link rel="stylesheet" href="./editor.css">
+    <link rel="stylesheet" href="./terminal.css">
+</head>
+<body>
+
+<div style="display: flex;">
+    <div style="flex: 1 0 50%;">
+        <div class="window">
+            <div class=menu>
+                <div class="button close"></div>
+                <div class="button minimize"></div>
+                <div class="button zoom"></div>
+            </div>
+            <div class="editor">
+                <textarea id="code">
+import log, { bg, cyan, magenta } from "https://esm.sh/logtint"
+
+log`${cyan`You can make any color a background color!`}`
+log`${magenta`Or maybe you just need a brighter color?`}`
+log`${bg(cyan)(magenta`Yellow text on a bright yellow background? Just use both!`)}`
+  </textarea>
+                <div id="run" class="execute"></div>
+            </div>
+        </div>
+    </div>
+    <div style="flex: 1 0 50%;">
+        <div class="window">
+            <div class=menu>
+                <div class="button close"></div>
+                <div class="button minimize"></div>
+                <div class="button zoom"></div>
+            </div>
+            <div id="terminal"></div>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import Terminal from "./terminal.js"
+
+    const terminal = new Terminal("terminal")
+    terminal.enter()
+
+
+    //
+    const execute = document.getElementById("run")
+    const code = document.getElementById("code")
+
+    execute.addEventListener("click", async () => {
+        await terminal.input(`node index.js`)
+        const blob = new Blob(
+            [ `import _console from 'data:text/javascript,export default console';\n` +
+            `const console = _console;\n${code.value}` ],
+            { type: "application/javascript" }
+        )
+        const blobURL = URL.createObjectURL(blob)
+        try {
+            await import(blobURL)
+        } catch (error) {
+            console.error(error)
+        }
+        URL.revokeObjectURL(blobURL)
+    })
+
+
+    //
+    const native = {
+        log: console.log,
+        debug: console.debug,
+        info: console.info,
+        warn: console.warn,
+        error: console.error
+    }
+    const logger = (log) => (message) => {
+        terminal.output(message)
+        log.call(console, message)
+    }
+    console.log = logger(native.log)
+    console.debug = logger(native.debug)
+    console.info = logger(native.info)
+    console.warn = logger(native.warn)
+    console.error = logger(native.error)
+</script>
+</body>
+</html>

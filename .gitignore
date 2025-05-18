@@ -13,7 +13,9 @@
 !buildscript
 !buildscript/*
 !buildscript/**/*
-
+!docs
+!docs/*
+!docs/**/*
 
 ## Coverage directory
 coverage/

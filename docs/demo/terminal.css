@@ -1,0 +1,51 @@
+.tty {
+    box-sizing: border-box;
+    padding: 20px;
+    background-color: #151515;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+
+.line {
+    overflow: hidden;
+    position: relative;
+    font-family: monospace;
+    font-size: 1.25em;
+    text-align: left;
+    white-space: nowrap;
+    width: 0;
+    height: 1.25em;
+    color: gainsboro;
+    animation: type .5s 0.25s steps(20, end) forwards;
+}
+
+.cursor {
+    font-weight: bold;
+    color: #fff;
+    animation: blink 1s 0.5s infinite;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+    40% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes type {
+    to {
+        width: 100%;
+    }
+}
