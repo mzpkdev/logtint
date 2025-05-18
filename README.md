@@ -3,7 +3,7 @@
 [![license](https://img.shields.io/npm/l/logtint.svg)](https://github.com/mzpkdev/logtint/blob/master/LICENSE)
 [![npm version](https://img.shields.io/npm/v/logtint.svg)](https://www.npmjs.com/package/logtint)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/logtint)](https://bundlephobia.com/result?p=logtint)
+[![bundle size](https://img.shields.io/bundlephobia/min/logtint)](https://bundlephobia.com/result?p=logtint)
 
 </div>
 <br>

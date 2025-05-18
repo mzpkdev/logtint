@@ -1,8 +1,9 @@
 .window {
     box-sizing: border-box;
-    width: 90%;
-    height: 25px;
+    position: relative;
+    height: 100%;
     margin: 0 auto;
+    padding: 24px;
 }
 
 .menu {

@@ -6,7 +6,6 @@
     <style>
         body {
             background-color: #272727;
-            padding: 32px 0;
         }
     </style>
     <link rel="stylesheet" href="./window.css">
@@ -15,7 +14,7 @@
 </head>
 <body>
 
-<div style="display: flex;">
+<div id="root" style="display: flex; flex-direction: column;">
     <div style="flex: 1 0 50%;">
         <div class="window">
             <div class=menu>
@@ -53,6 +52,13 @@ log`A ${yellow`lot`} of ${magenta`colors`} ${cyan`to`} ${magenta`choose`} ${cyan
 
     const terminal = new Terminal("terminal")
     terminal.enter()
+
+
+    //
+    if (window.innerWidth > window.innerHeight * 1.25) {
+        const root = document.getElementById("root")
+        root.style.flexDirection = "row"
+    }
 
 
     //
