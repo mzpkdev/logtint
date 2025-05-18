@@ -17,13 +17,13 @@
     width: 0;
     height: 1.25em;
     color: gainsboro;
-    animation: type .5s 0.25s steps(20, end) forwards;
+    animation: type 250ms 250ms steps(20, end) forwards;
 }
 
 .cursor {
     font-weight: bold;
     color: #fff;
-    animation: blink 1s 0.5s infinite;
+    animation: blink 750ms 500ms infinite;
 }
 
 @keyframes blink {

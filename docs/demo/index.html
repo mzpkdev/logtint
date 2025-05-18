@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>JS REPL with Import Support</title>
+    <title>LogTint Demo</title>
     <style>
         body {
             background-color: #272727;
-            padding: 10px;
+            padding: 32px 0;
         }
     </style>
     <link rel="stylesheet" href="./window.css">
@@ -24,12 +24,13 @@
                 <div class="button zoom"></div>
             </div>
             <div class="editor">
-                <textarea id="code">
-import log, { bg, cyan, magenta } from "https://esm.sh/logtint"
+                <textarea id="code" spellcheck="false">
+import log, { bg, bright, yellow, cyan, magenta, white } from "https://esm.sh/logtint"
 
-log`${cyan`You can make any color a background color!`}`
-log`${magenta`Or maybe you just need a brighter color?`}`
-log`${bg(cyan)(magenta`Yellow text on a bright yellow background? Just use both!`)}`
+log`${cyan`Make your logs less boring!`}`
+log`${bright(magenta)`You can make any color brighter`}`
+log`${bg(cyan)(white`You can make any color a background color`)}`
+log`A ${yellow`lot`} of ${magenta`colors`} ${cyan`to`} ${magenta`choose`} ${cyan`from`}!`
   </textarea>
                 <div id="run" class="execute"></div>
             </div>
