@@ -4,11 +4,11 @@ import tint from "./tint"
 
 const createLogger = (logger: typeof console.log) => {
     return (strings: TemplateStringsArray, ...values: unknown[]): void => {
-        const { text, styles } = tint(strings, ...values)
+        const { encoded, styles } = tint(strings, ...values)
         if (inBrowser()) {
-            logger.call(globalThis.console, text, ...styles)
+            logger.call(globalThis.console, encoded, ...styles)
         } else {
-            logger.call(globalThis.console, text.replaceAll(`<END>`, "\x1b[0m"))
+            logger.call(globalThis.console, encoded.replaceAll(`<END>`, "\x1b[0m"))
         }
     }
 }

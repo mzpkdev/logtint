@@ -1,85 +1,128 @@
-import { inBrowser, inServer } from "./utils"
-import tint, { Tint, TintStyle, TintColor } from "./tint"
+import { UnsupportedColorSpace } from "./errors"
+import symbols from "./symbols"
+import { inBrowser, inServer, convertRGBToANSI256, convertHSLToRGB } from "./utils"
+import tint, { Tint, TintStyle, TintColor, TintFactory } from "./tint"
 
 
 const formatting = {
-    reset: TintStyle("color: unset;", 0),
-    italic: TintStyle("font-style: italic;", 3),
-    bold: TintStyle("font-weight: bold;", 1),
-    underline: TintStyle("text-decoration: underline;", 4),
-    strikethrough: TintStyle("text-decoration: line-through;", 9),
-    dim: TintStyle("opacity: 0.5;", 2),
-    inverse: TintStyle("filter: invert(100%);", 7),
-    hidden: TintStyle("visibility: hidden;", 8)
+    reset: TintStyle.from("color: unset;", 0),
+    italic: TintStyle.from("font-style: italic;", 3),
+    bold: TintStyle.from("font-weight: bold;", 1),
+    underline: TintStyle.from("text-decoration: underline;", 4),
+    strikethrough: TintStyle.from("text-decoration: line-through;", 9),
+    dim: TintStyle.from("color: color-mix(in srgb, currentColor 70%, transparent);", 2),
+    inverse: TintStyle.from("filter: invert(100%);", 7),
+    hidden: TintStyle.from("visibility: hidden;", 8)
 }
 
 const colors = {
-    black: TintColor([ "color", 0, 0, 16 ], 30),
-    white: TintColor([ "color", 0, 0, 90 ], 37),
-    red: TintColor([ "color", 4, 65, 52 ], 31),
-    green: TintColor([ "color", 142, 61, 35 ], 32),
-    blue: TintColor([ "color", 210, 50, 53 ], 34),
-    yellow: TintColor([ "color", 54, 100, 39 ], 33),
-    magenta: TintColor([ "color", 300, 43, 55 ], 35),
-    cyan: TintColor([ "color", 180, 100, 35 ], 36)
+    black: TintColor.from([ "color", "hsl", 0 / 360, 0, 0 ], [ 30, `\x1b[%cm` ]),
+    white: TintColor.from([ "color", "hsl", 0 / 360, 0, 0.90 ], [ 37, `\x1b[%cm` ]),
+    red: TintColor.from([ "color", "hsl", 4 / 360, 0.65, 0.52 ], [ 31, `\x1b[%cm` ]),
+    green: TintColor.from([ "color", "hsl", 142 / 360, 0.61, 0.35 ], [ 32, `\x1b[%cm` ]),
+    blue: TintColor.from([ "color", "hsl", 210 / 360, 0.50, 0.53 ], [ 34, `\x1b[%cm` ]),
+    yellow: TintColor.from([ "color", "hsl", 54 / 360, 1.00, 0.39 ], [ 33, `\x1b[%cm` ]),
+    magenta: TintColor.from([ "color", "hsl", 300 / 360, 0.43, 0.55 ], [ 35, `\x1b[%cm` ]),
+    cyan: TintColor.from([ "color", "hsl", 180 / 360, 1.00, 0.35 ], [ 36, `\x1b[%cm` ])
 }
 
 
-export type Crayon = (TintStyle | TintColor) & {
+export type Crayon = (TintStyle | TintColor | TintFactory) & {
     (text: string): Tint
     (text: Tint): Tint
     (strings: TemplateStringsArray, ...values: unknown[]): Tint
 }
 
-export const crayon = (style: TintStyle | TintColor): Crayon => {
+export const crayon = (style: TintStyle | TintColor | TintFactory): Crayon => {
     const fn = (strings: string | Tint | TemplateStringsArray, ...values: unknown[]): Tint => {
+        let style2 = style
+        if (TintFactory.isTintFactory(style)) {
+            style2 = style(strings)
+        }
         if (Tint.isTint(strings)) {
-            return Tint(strings, String(style))
+            return Tint.from(strings, String(style2))
         }
         if (typeof strings === "string") {
-            return Tint(strings, String(style))
+            return Tint.from(strings, String(style2))
         }
-        return Tint(tint(strings, ...values), String(style))
+        return Tint.from(tint(strings, ...values), String(style2))
     }
-    return Object.assign(fn, style)
+    return Object.assign(fn, style, { [symbols.isCrayon]: true })
 }
 
 
 export const bg = (color: Crayon): Crayon => {
-    if (TintStyle.isTintStyle(color)) {
+    if (TintStyle.isTintStyle(color) || TintFactory.isTintFactory(color)) {
         return color
     }
     let { ansi, css } = color
     if (inBrowser()) {
-        const [ , r, g, b ] = css
-        css = [ "background-color", r, g, b ]
+        const [ , scale, rh, gs, bl ] = css
+        css = [ "background-color", scale, rh, gs, bl ]
     }
     if (inServer()) {
-        if ((ansi >= 30 && ansi <= 37) || (ansi >= 90 && ansi <= 97)) {
-            ansi = ansi + 10
+        let [ code, escape ] = ansi
+        if ((code >= 30 && code <= 37) || (code >= 90 && code <= 97)) {
+            code = code + 10
         }
+        ansi = [ code, escape ]
     }
-    return crayon(TintColor(css, ansi))
+    return crayon(TintColor.from(css, ansi))
 }
 
 export const bright = (color: Crayon): Crayon => {
-    if (TintStyle.isTintStyle(color)) {
+    if (TintStyle.isTintStyle(color) || TintFactory.isTintFactory(color)) {
         return color
     }
     let { ansi, css } = color
     if (inBrowser()) {
-        let [ property, h, s, l ] = css
-        s = Math.min(s + 10, 85)
-        l = Math.min(Math.max(l, 45) + 15, 75)
-        css = [ property, h, s, l ]
-    }
-    if (inServer()) {
-        if ((ansi >= 30 && ansi <= 37) || (ansi >= 40 && ansi <= 47)) {
-            ansi = ansi + 60
+        const [ property, scale ] = css
+        if (scale === "rgb") {
+            throw new UnsupportedColorSpace()
+        }
+        if (scale === "hsl") {
+            let [ , , h, s, l ] = css
+            s = Math.min(s + 0.05, 0.85)
+            l = Math.min(Math.max(l, 0.45) + 0.10, 0.75)
+            css = [ property, scale, h, s, l ]
         }
     }
-    return crayon(TintColor(css, ansi))
+    if (inServer()) {
+        let [ code, escape ] = ansi
+        if ((code >= 30 && code <= 37) || (code >= 40 && code <= 47)) {
+            code = code + 60
+        }
+        ansi = [ code, escape ]
+    }
+    return crayon(TintColor.from(css, ansi))
 }
+
+export const rgb = (r: number, g: number, b: number): Crayon => {
+    const css = [ "color", "rgb", r, g, b ] as const
+    let ansi = convertRGBToANSI256([ r, g, b ])
+    return crayon(TintColor.from(css, [ ansi, `\x1b[38;5;%cm` ]))
+}
+
+export const hsl = (h: number, s: number, l: number): Crayon => {
+    const css = [ "color", "hsl", h, s, l ] as const
+    let ansi = convertRGBToANSI256(convertHSLToRGB([ h, s, l ]))
+    return crayon(TintColor.from(css, [ ansi, `\x1b[38;5;%cm` ]))
+}
+
+export const colorize = crayon((string: string) => {
+    const input = string.trim()
+    let hash = 0
+    for (let i = 0; i < input.length; i++) {
+        hash = input.charCodeAt(i) + ((hash << 5) - hash)
+        hash |= 0
+    }
+    const r = ((hash >> 16) & 0xff + 256) % 256
+    const g = ((hash >> 8) & 0xff + 256) % 256
+    const b = (hash & 0xff + 256) % 256
+    const css = [ "color", "rgb", r, g, b ] as const
+    const ansi = convertRGBToANSI256([ r, g, b ])
+    return TintColor.from(css, [ ansi, `\x1b[38;5;%cm` ])
+})
 
 
 export const reset = crayon(formatting.reset)

@@ -167,7 +167,7 @@ Or make your own!
 ```javascript
 import log, { crayon, TextStyle } from "logtint"
 
-const overline = crayon(TintStyle("text-decoration: overline;", 9 /* underline */))
+const overline = crayon(TintStyle.from("text-decoration: overline;", 9 /* underline */))
 
 log`You need your own? ${overline("We've got you covered!")}`
 ```
