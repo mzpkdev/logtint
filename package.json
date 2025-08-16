@@ -7,11 +7,10 @@
   "module": "./index.mjs",
   "types": "./index.d.ts",
   "scripts": {
-    "postinstall": "ts-patch install",
-    "build": "node buildscript/compile.mjs",
-    "clean": "node buildscript/clean.mjs",
-    "prepack": "npm run clean && npm run build",
-    "postversion": "git add -A ./ && git push && git push --tags"
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "preprepare": "ts-patch install",
+    "prepack": "npm run build"
   },
   "devDependencies": {
     "@types/node": "^22.15.17",
