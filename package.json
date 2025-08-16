@@ -1,6 +1,6 @@
 {
   "name": "logtint",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Lightweight, isomorphic library that brings colors and style to your `console.log`",
   "type": "commonjs",
   "main": "./index.js",
@@ -12,10 +12,12 @@
     "preprepare": "ts-patch install",
     "prepack": "npm run build"
   },
+  "dependencies": {
+    "tslib": "^2.6.3"
+  },
   "devDependencies": {
     "@types/node": "^22.15.17",
     "ts-patch": "^3.2.1",
-    "tslib": "^2.6.3",
     "typescript": "^5.5.4",
     "typescript-transform-paths": "^3.5.5"
   },
