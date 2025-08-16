@@ -1,14 +1,14 @@
 {
   "name": "logtint",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Lightweight, isomorphic library that brings colors and style to your `console.log`",
   "type": "commonjs",
   "main": "./index.js",
   "module": "./index.mjs",
   "types": "./index.d.ts",
   "scripts": {
-    "build": "tsc --build",
-    "clean": "tsc --build --clean",
+    "build": "node buildscript/compile.mjs",
+    "clean": "node buildscript/clean.mjs",
     "preprepare": "ts-patch install",
     "prepack": "npm run build"
   },
